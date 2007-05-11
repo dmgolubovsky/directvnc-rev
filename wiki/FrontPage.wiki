@@ -3,7 +3,7 @@
 
 = Introduction =
 
-The goal of this project is to provide a graphics terminal client suitable for Xen3 Dom0. It is expected that guest VMs will run Xvnc for their graphics output in case they need X. The [http://savannah.nongnu.org/projects.directvnc directvnc] program is a thin layer on top of [http://www.directfb.org DirectFB], has small code size and memory footprint, does not need to be suid-root to run.
+The goal of this project is to provide a graphics terminal client suitable for Xen3 Dom0. It is expected that guest VMs will run Xvnc for their graphics output in case they need X. The [http://savannah.nongnu.org/projects/directvnc directvnc] program is a thin layer on top of [http://www.directfb.org DirectFB], has small code size and memory footprint, does not need to be suid-root to run.
 
 However this program has not been in active development for a couple years now. It was written when 64 bit CPUs were not so widespread, it supports only 16 bpp screen resolution, and does not support Unicode. This project is an attempt to revive directvnc adding missing features.
 
@@ -20,4 +20,3 @@ However this program has not been in active development for a couple years now. 
 
   * Screen does not redraw properly when switching back to the Linux console where directvnc is running - may be a DirectFB issue though.
   * Not all mouse chords work (also need to look at DirectFB side)
-
