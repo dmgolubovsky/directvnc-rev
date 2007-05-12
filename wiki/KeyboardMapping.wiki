@@ -91,6 +91,9 @@ To force directvnc to load a keyboard layout file upon startup, its full path sh
 directvnc host:screen <other options> -m /path/to/keyboard/layout/file
 }}}
 
-Thus, if the dvncmap.cyr file is located 
+Thus, if the dvncmap.cyr file is located in the current directory, to load it, use:
 
+{{{
+directvnc host:screen <other options> -m dvncmap.cyr
+}}}
 
