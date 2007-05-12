@@ -69,10 +69,21 @@ into
 keycode 24 0x071 0x051 0x6ca 0x6ea
 }}}
 
-The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. The directvnc keyboard layout file mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
+The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. Inside, the script runs its standard input through the C preprocessor including the keysymdef.h file and prepending each keysym identifier with "XK_". The directvnc keyboard layout file mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
 
 = Key Modifiers Logic =
 
+The directvnc's keyboard layout switching module holds an internal table where the contents of the keyboard layout file is read into. The module intercepts all keyboard input obtained from DirectFB, and uses keyboard scan code plus 8 (also known as the *MIN_KEYCODE* constant) as index into that table to determine whether any mapping exists for a given keycode.
+
+The directvnc's keyboard layout switching module uses the _ScrollLock_ key as mode lock: when its LED is on, the third or fourth keysym would be transmitted (depending on the _Shift_ and _CapsLock_ status); when Scroll lock LED is off, the first or the second keysym would be transmitted.
+
+The _Alt_ or _AltGr_ keys are not used to control keyboard mode.
+
+For letters, _Shift_ and _CapsLock_ are XORed. For numbers, _CapsLock_ does not apply.
+
+If _Ctrl_ is pressed, or there was no keyboard layout file specified, or the keyboard layout file does not contain any mapping for a given keycode, directvnc performs its default translation of keyboard code into a keysym using its hardcoded ISO-8859-1 translation table.
+
 = Running Directvnc with Alternative Keyboard Layout =
+
 
 
