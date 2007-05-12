@@ -26,7 +26,7 @@ keycode  27             = r               R               Cyrillic_ka           
 
 An example of a xmodmap file for Cyrillic input can be found [http://directvnc-rev.googlecode.com/files/modmap.cyr here].
 
-= Directvnc Keyboard Layout FIles Syntax =
+= Directvnc Keyboard Layout File Syntax =
 
 The xmodmap file uses character identifiers to identify keysyms that keycodes will be translated to. While this works in the original xmodmap program which acts as a client to the X server it loads keyboard layout into (xmodmap queries the X server to convert symbolic keysym identifiers into numeric), directvnc is not supposed to interact with the remote Xvnc server this way. Instead, an alternative format is used, which contains hexadecimal codes for keysyms:
 
@@ -48,6 +48,31 @@ The _keycode_ keyword does not play any role at the moment, but is preserved for
 
 = Conversion From One to Another =
 
+As noted above, directvnc does not query the remote Xvnc server for keysyms' numeric values. There is the [http://cvsweb.xfree86.org/cvsweb/*checkout*/xc/include/keysymdef.h?rev=1.14 keysymdef.h] include file which contains all the necessary information. In particular, considering this (a small portion of the keysymdef.h file):
+
+{{{
+#define XK_Q                   0x051
+#define XK_q                   0x071
+#define XK_Cyrillic_shorti                             0x6ca
+#define XK_Cyrillic_SHORTI                             0x6ea
+}}}
+
+it becomes clear how to convert
+
+{{{
+keycode  24             = q               Q               Cyrillic_shorti       Cyrillic_SHORTI
+}}}
+
+into
+
+{{{
+keycode 24 0x071 0x051 0x6ca 0x6ea
+}}}
+
+The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. The directvnc keyboard layout file mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
+
 = Key Modifiers Logic =
 
 = Running Directvnc with Alternative Keyboard Layout =
+
+
