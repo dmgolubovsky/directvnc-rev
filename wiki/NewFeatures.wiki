@@ -7,3 +7,5 @@
 Original directvnc had only support for 16bpp screen color depth. Support for 24bpp (4 bytes per pixel, no alpha-channel) has been added. At the moment, it is still necessary to use the _-bpp_ command line option to set color depth. When negotiating with the remote Xvnc server side, color depth supplied by the server will be used. It is therefore necessary to take care (at least in the present) that screen color depth (default, or set in the [http://www.directfb.org/docs/directfbrc.5.html DirectFB configuration file]), color depth supplied at the command line, and remote Xvnc server color depth all match.
 
 = Input Features =
+
+== Keyboard Layout Switching ==
