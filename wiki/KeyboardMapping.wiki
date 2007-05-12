@@ -2,6 +2,27 @@
 
 = Xmodmap Keyboard Layout File Syntax =
 
+General syntax of the xmodmap keyboard layout file is described in the [http://www.linuxmanpages.com/man1/xmodmap.1x.php xmodmap(1x)] manual page. For the purposes of keyboard switching implementation in directvnc, the following subset of its syntax is used:
+
+  * Comments (linets starting with an exclamation mark) are recognized as such, and ignored
+  * Expressions using _keycode_ are recognized with up to four keysym values, used as described in the mentioned manual page.
+
+So, the following is a valid syntax of an xmodmap file that can be converted into a directvnc keyboard layout file:
+
+{{{
+!...........................................................................
+!        Key            Base              Shift           Mode    Mode+Shift
+!---------------------------------------------------------------------------
+keycode  13             = 4               dollar          4       quotedbl
+keycode  14             = 5               percent         5       colon
+keycode  15             = 6               asciicircum     6       comma
+keycode  16             = 7               ampersand       7       period
+keycode  24             = q               Q               Cyrillic_shorti       Cyrillic_SHORTI
+keycode  25             = w               W               Cyrillic_tse          Cyrillic_TSE
+keycode  26             = e               E               Cyrillic_u            Cyrillic_U
+keycode  27             = r               R               Cyrillic_ka           Cyrillic_KA
+}}}
+
 = Directvnc Keyboard Layout FIles Syntax =
 
 = Conversion From One to Another =
