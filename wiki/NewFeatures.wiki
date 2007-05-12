@@ -9,3 +9,5 @@ Original directvnc had only support for 16bpp screen color depth. Support for 24
 = Input Features =
 
 == Keyboard Layout Switching ==
+
+Original directvnc has a hardcoded table which translates keyboard input deceived from DirectFB into ISO8859-1 (latin-1) character codes (keysyms) to be sent to the remote Xvnc server, thus providing no ability to dynamically switch keyboard layout. A new feature has been added, providing for setting of alternative keyboard layout, with ability to support non-latin characters such as Cyrillic.
