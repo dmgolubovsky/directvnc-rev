@@ -28,7 +28,7 @@ An example of a xmodmap file for Cyrillic input can be found [http://directvnc-r
 
 = Directvnc Keyboard Layout File Syntax =
 
-The xmodmap file uses character identifiers to identify keysyms that keycodes will be translated to. While this works in the original xmodmap program which acts as a client to the X server it loads keyboard layout into (xmodmap queries the X server to convert symbolic keysym identifiers into numeric), directvnc is not supposed to interact with the remote Xvnc server this way. Instead, an alternative format is used, which contains hexadecimal codes for keysyms:
+The xmodmap file uses character identifiers to identify keysyms that keycodes will be translated to. While this works in the original xmodmap program which acts as a client to the X server it loads keyboard layout into (xmodmap queries the X server to convert symbolic keysym identifiers into numeric), directvnc is not supposed to interact with the remote Xvnc server this way. Instead, a derivative format is used, which contains hexadecimal codes for keysyms:
 
 {{{
 keycode 13 0x034 0x024 0x034 0x022
@@ -69,7 +69,7 @@ into
 keycode 24 0x071 0x051 0x6ca 0x6ea
 }}}
 
-The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. Inside, the script runs its standard input through the C preprocessor including the keysymdef.h file and prepending each keysym identifier with "XK_". The directvnc keyboard layout file mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
+The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. Inside, the script runs its standard input through the C preprocessor including the keysymdef.h file and prepending each keysym identifier with `XK_`. The [http://directvnc-rev.googlecode.com/files/dvncmap.cyr directvnc keyboard layout file] mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
 
 = Key Modifiers Logic =
 
@@ -96,4 +96,5 @@ Thus, if the dvncmap.cyr file is located in the current directory, to load it, u
 {{{
 directvnc host:screen <other options> -m dvncmap.cyr
 }}}
+
 
