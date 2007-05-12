@@ -1,0 +1,4 @@
+#summary TO DO LIST
+
+  * Make color depth more autoconfigurable based on DirectFB settings
+
