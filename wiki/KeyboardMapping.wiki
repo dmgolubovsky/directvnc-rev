@@ -4,8 +4,9 @@
 
 General syntax of the xmodmap keyboard layout file is described in the [http://www.linuxmanpages.com/man1/xmodmap.1x.php xmodmap(1x)] manual page. For the purposes of keyboard switching implementation in directvnc, the following subset of its syntax is used:
 
-  * Comments (linets starting with an exclamation mark) are recognized as such, and ignored
-  * Expressions using _keycode_ are recognized with up to four keysym values, used as described in the mentioned manual page.
+  * Comments (lines starting with an exclamation mark) are recognized as such, and ignored
+  * Expressions using _keycode_ are recognized with up to four keysym values, used as described in the mentioned manual page
+  * Other xmodmap expressions will be ignored.
 
 So, the following is a valid syntax of an xmodmap file that can be converted into a directvnc keyboard layout file:
 
@@ -23,7 +24,27 @@ keycode  26             = e               E               Cyrillic_u            
 keycode  27             = r               R               Cyrillic_ka           Cyrillic_KA
 }}}
 
+An example of a xmodmap file for Cyrillic input can be found [http://directvnc-rev.googlecode.com/files/modmap.cyr here].
+
 = Directvnc Keyboard Layout FIles Syntax =
+
+The xmodmap file uses character identifiers to identify keysyms that keycodes will be translated to. While this works in the original xmodmap program which acts as a client to the X server it loads keyboard layout into (xmodmap queries the X server to convert symbolic keysym identifiers into numeric), directvnc is not supposed to interact with the remote Xvnc server this way. Instead, an alternative format is used, which contains hexadecimal codes for keysyms:
+
+{{{
+keycode 13 0x034 0x024 0x034 0x022
+keycode 14 0x035 0x025 0x035 0x03a
+keycode 15 0x036 0x05e 0x036 0x02c
+keycode 16 0x037 0x026 0x037 0x02e
+keycode 24 0x071 0x051 0x6ca 0x6ea
+keycode 25 0x077 0x057 0x6c3 0x6e3
+keycode 26 0x065 0x045 0x6d5 0x6f5
+keycode 27 0x072 0x052 0x6cb 0x6eb
+keycode 28 0x074 0x054 0x6c5 0x6e5
+keycode 29 0x079 0x059 0x6ce 0x6ee
+keycode 30 0x075 0x055 0x6c7 0x6e7
+}}}
+
+The _keycode_ keyword does not play any role at the moment, but is preserved for the future extensions, when other xmodmap expressions may also be recognized.
 
 = Conversion From One to Another =
 
