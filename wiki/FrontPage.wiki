@@ -10,13 +10,15 @@ However this program has not been in active development for a couple years now. 
 
 = Major Things to Fix =
 
-  * Make sure it compiles in 64bit environment (AMD64)
-  * Add support for at least 24bpp screen resolution
-  * Implement universal keyboard switch (similarly to the xmodmap mechanism)
-    * Ctrl-Q is not a good choice for a quit key, Ctrl-Alt-Del is a better choice since the keyboard is not in its regular console mode anyway
+  * Make sure it compiles in 64bit environment (AMD64): done, testing snapshots available  in the [http://code.google.com/p/directvnc-rev/downloads/list Downloads Section]
+  * Add support for at least 24bpp screen resolution: done, with manual configuration, see the NewFeatures page
+  * Implement universal keyboard switch (similarly to the xmodmap mechanism): done, see the NewFeatures page
+    * Ctrl-Q is not a good choice for a quit key, Ctrl-Alt-Del is a better choice since the keyboard is not in its regular console mode anyway: done
 
 
 = Known Issues =
 
   * Screen does not redraw properly when switching back to the Linux console where directvnc is running - may be a DirectFB issue though.
   * Not all mouse chords work (also need to look at DirectFB side)
+
+
