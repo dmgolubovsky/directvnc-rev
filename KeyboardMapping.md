@@ -1,0 +1,97 @@
+# Xmodmap Keyboard Layout File Syntax #
+
+General syntax of the xmodmap keyboard layout file is described in the [xmodmap(1x)](http://www.linuxmanpages.com/man1/xmodmap.1x.php) manual page. For the purposes of keyboard switching implementation in directvnc, the following subset of its syntax is used:
+
+  * Comments (lines starting with an exclamation mark) are recognized as such, and ignored
+  * Expressions using _keycode_ are recognized with up to four keysym values, used as described in the mentioned manual page
+  * Other xmodmap expressions will be ignored.
+
+So, the following is a valid syntax of an xmodmap file that can be converted into a directvnc keyboard layout file:
+
+```
+!...........................................................................
+!        Key            Base              Shift           Mode    Mode+Shift
+!---------------------------------------------------------------------------
+keycode  13             = 4               dollar          4       quotedbl
+keycode  14             = 5               percent         5       colon
+keycode  15             = 6               asciicircum     6       comma
+keycode  16             = 7               ampersand       7       period
+keycode  24             = q               Q               Cyrillic_shorti       Cyrillic_SHORTI
+keycode  25             = w               W               Cyrillic_tse          Cyrillic_TSE
+keycode  26             = e               E               Cyrillic_u            Cyrillic_U
+keycode  27             = r               R               Cyrillic_ka           Cyrillic_KA
+```
+
+An example of a xmodmap file for Cyrillic input can be found [here](http://directvnc-rev.googlecode.com/files/modmap.cyr).
+
+# Directvnc Keyboard Layout File Syntax #
+
+The xmodmap file uses character identifiers to identify keysyms that keycodes will be translated to. While this works in the original xmodmap program which acts as a client to the X server it loads keyboard layout into (xmodmap queries the X server to convert symbolic keysym identifiers into numeric), directvnc is not supposed to interact with the remote Xvnc server this way. Instead, a derivative format is used, which contains hexadecimal codes for keysyms:
+
+```
+keycode 13 0x034 0x024 0x034 0x022
+keycode 14 0x035 0x025 0x035 0x03a
+keycode 15 0x036 0x05e 0x036 0x02c
+keycode 16 0x037 0x026 0x037 0x02e
+keycode 24 0x071 0x051 0x6ca 0x6ea
+keycode 25 0x077 0x057 0x6c3 0x6e3
+keycode 26 0x065 0x045 0x6d5 0x6f5
+keycode 27 0x072 0x052 0x6cb 0x6eb
+keycode 28 0x074 0x054 0x6c5 0x6e5
+keycode 29 0x079 0x059 0x6ce 0x6ee
+keycode 30 0x075 0x055 0x6c7 0x6e7
+```
+
+The _keycode_ keyword does not play any role at the moment, but is preserved for the future extensions, when other xmodmap expressions may also be recognized.
+
+# Conversion From One to Another #
+
+As noted above, directvnc does not query the remote Xvnc server for keysyms' numeric values. There is the [keysymdef.h](http://cvsweb.xfree86.org/cvsweb/*checkout*/xc/include/keysymdef.h?rev=1.14) include file which contains all the necessary information. In particular, considering this (a small portion of the keysymdef.h file):
+
+```
+#define XK_Q                   0x051
+#define XK_q                   0x071
+#define XK_Cyrillic_shorti                             0x6ca
+#define XK_Cyrillic_SHORTI                             0x6ea
+```
+
+it becomes clear how to convert
+
+```
+keycode  24             = q               Q               Cyrillic_shorti       Cyrillic_SHORTI
+```
+
+into
+
+```
+keycode 24 0x071 0x051 0x6ca 0x6ea
+```
+
+The _bin_ subdirectory of the directvnc installation contains the `xmapconv` shell script which reads an xmodmap syntax file on its standard input, and writes the directvnc compatible syntax file on its standard output. Inside, the script runs its standard input through the C preprocessor including the keysymdef.h file and prepending each keysym identifier with `XK_`. The [directvnc keyboard layout file](http://directvnc-rev.googlecode.com/files/dvncmap.cyr) mentioned earlier was produced exactly this way out of the xmodmap file for Cyrillic input.
+
+# Key Modifiers Logic #
+
+The directvnc's keyboard layout switching module holds an internal table where the contents of the keyboard layout file is read into. The module intercepts all keyboard input obtained from DirectFB, and uses keyboard scan code plus 8 (also known as the **MIN\_KEYCODE** constant) as index into that table to determine whether any mapping exists for a given keycode.
+
+The directvnc's keyboard layout switching module uses the `ScrollLock` key as mode lock: when its LED is on, the third or fourth keysym would be transmitted (depending on the `Shift` and `CapsLock` status); when Scroll lock LED is off, the first or the second keysym would be transmitted.
+
+The `Alt` or `AltGr` keys are not used to control keyboard mode.
+
+For letters, `Shift` and `CapsLock` are XORed. For numbers, `CapsLock` does not apply.
+
+If `Ctrl` is pressed, or there was no keyboard layout file specified, or the keyboard layout file does not contain any mapping for a given keycode, directvnc performs its default translation of keyboard code into a keysym using its hardcoded ISO-8859-1 translation table.
+
+# Running Directvnc Using Keyboard Layout File #
+
+To force directvnc to load a keyboard layout file upon startup, its full path should be provided with _-m_ command line option:
+
+```
+directvnc host:screen <other options> -m /path/to/keyboard/layout/file
+```
+
+Thus, if the dvncmap.cyr file is located in the current directory, to load it, use:
+
+```
+directvnc host:screen <other options> -m dvncmap.cyr
+```
+

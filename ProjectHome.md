@@ -1,0 +1,1 @@
+The directvnc (VNC viewer using DirectFB for display) is a lightweight tool to connect to VNC hosts without running a Xwindow server. The original project (http://savannah.nongnu.org/projects/directvnc) seems to have been abandoned by its creators. Here, it is attempted to revive the project.
